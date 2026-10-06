@@ -1,0 +1,20 @@
+.sln-section-order, .sln-repeater { margin: 0 0 8px; padding: 0; list-style: none; }
+.sln-section-order { border: 1px solid #dcdcde; border-radius: 4px; }
+.sln-section-order-item, .sln-repeater-block-header { display: flex; align-items: center; gap: 8px; background: #fff; padding: 8px 10px; }
+.sln-section-order-item { border-bottom: 1px solid #dcdcde; }
+.sln-section-order-item:last-child { border-bottom: 0; }
+.sln-drag-handle, .sln-repeater-drag-handle { cursor: grab; color: #8c8f94; }
+.sln-section-order-item label { display: flex; gap: 6px; align-items: center; margin: 0; }
+.sln-repeater { display: flex; flex-direction: column; gap: 6px; }
+.sln-repeater-block { border: 1px solid #dcdcde; border-radius: 4px; background: #fff; }
+.sln-repeater-block-toggle { flex: 1; text-align: left; background: none; border: 0; font-weight: 600; cursor: pointer; }
+.sln-repeater-remove { background: none; border: 0; color: #b32d2e; cursor: pointer; }
+.sln-repeater-remove:disabled { color: #c3c4c7; cursor: not-allowed; }
+.sln-repeater-block-body { display: flex; flex-direction: column; gap: 8px; padding: 8px 10px 12px; border-top: 1px solid #f0f0f1; }
+.sln-repeater-block.is-collapsed .sln-repeater-block-body { display: none; }
+.sln-repeater-field { display: flex; flex-direction: column; gap: 3px; font-size: 12px; font-weight: 600; }
+.sln-repeater-field input, .sln-repeater-field textarea, .sln-repeater-field select { font-weight: 400; width: 100%; }
+.sln-repeater-add { width: 100%; }
+.sln-hidden { display: none !important; }
+.sln-repeater-image { display: flex; align-items: center; gap: 10px; }
+.sln-repeater-image-preview { width: 44px; height: 44px; object-fit: cover; border-radius: 4px; border: 1px solid #dcdcde; }
