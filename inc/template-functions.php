@@ -88,6 +88,9 @@ function sln_repeater( $page, $section, $field ) {
 
 function sln_render_sections( $page ) {
 	foreach ( sln_get_section_order( $page ) as $section_id ) {
+		if ( 'home' === $page && ! sln_field( 'home', $section_id, 'show' ) ) {
+			continue;
+		}
 		get_template_part( 'template-parts/sections/' . $page . '-' . $section_id );
 	}
 }
@@ -506,6 +509,39 @@ function sln_remove_query_value( $key, $value ) {
 		return remove_query_arg( $key );
 	}
 	return add_query_arg( $key, array_map( 'sanitize_title', $current ) );
+}
+
+function sln_maps_embed_src( $embed ) {
+	$embed = trim( (string) $embed );
+	if ( $embed && preg_match( '/src=["\']([^"\']+)["\']/', $embed, $matches ) ) {
+		$embed = $matches[1];
+	}
+	if ( '' === $embed ) {
+		return '';
+	}
+	$embed = esc_url_raw( $embed );
+	$host  = wp_parse_url( $embed, PHP_URL_HOST );
+	if ( $embed && $host && preg_match( '/(^|\.)google\.[a-z.]+$/i', $host ) ) {
+		return $embed;
+	}
+	return '';
+}
+
+function sln_map_frame( $embed, $image, $label ) {
+	$src = sln_maps_embed_src( $embed );
+	if ( $src ) {
+		printf(
+			'<iframe src="%s" title="%s" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>',
+			esc_url( $src ),
+			esc_attr( $label )
+		);
+		return;
+	}
+	if ( $image ) {
+		printf( '<img src="%s" alt="%s" />', esc_url( $image ), esc_attr( $label ) );
+		return;
+	}
+	sln_placeholder( $label );
 }
 
 function sln_link_or_shop( $url ) {

@@ -9,6 +9,8 @@ if ( is_front_page() ) {
 	$current = 'brands';
 } elseif ( is_page( 'service' ) ) {
 	$current = 'service';
+} elseif ( is_page( 'financing' ) ) {
+	$current = 'financing';
 } elseif ( is_page( 'about' ) ) {
 	$current = 'about';
 } elseif ( is_page( 'contact' ) ) {
@@ -31,8 +33,9 @@ $fallback = array(
 	'home'    => array( sln_field( 'shop', 'breadcrumb', 'home_label' ), home_url( '/' ) ),
 	'shop'    => array( sln_field( 'shop', 'breadcrumb', 'current_label' ), $shop ),
 	'brands'  => array( sln_field( 'brands', 'intro', 'crumb' ), home_url( '/brands/' ) ),
-	'service' => array( sln_field( 'service', 'hero', 'crumb' ), home_url( '/service/' ) ),
-	'about'   => array( sln_field( 'about', 'intro', 'crumb' ), home_url( '/about/' ) ),
+	'service'   => array( sln_field( 'service', 'hero', 'crumb' ), home_url( '/service/' ) ),
+	'financing' => array( sln_field( 'financing', 'hero', 'crumb' ), home_url( '/financing/' ) ),
+	'about'     => array( sln_field( 'about', 'intro', 'crumb' ), home_url( '/about/' ) ),
 	'contact' => array( sln_field( 'contact', 'intro', 'crumb' ), home_url( '/contact/' ) ),
 );
 ?><!DOCTYPE html>

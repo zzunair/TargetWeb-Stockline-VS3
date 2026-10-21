@@ -93,6 +93,68 @@ function sln_redirect_commerce_pages() {
 }
 add_action( 'template_redirect', 'sln_redirect_commerce_pages' );
 
+/**
+ * Product IDs matching normal product text plus SKU, variation SKU, brand,
+ * category, tag, global attributes, and custom product attributes.
+ */
+function sln_product_search_ids( $term ) {
+	if ( ! function_exists( 'wc_get_products' ) ) {
+		return array();
+	}
+	$term = trim( sanitize_text_field( $term ) );
+	if ( '' === $term ) {
+		return array();
+	}
+
+	$ids = wc_get_products(
+		array(
+			'status' => 'publish',
+			's'      => $term,
+			'limit'  => -1,
+			'return' => 'ids',
+		)
+	);
+
+	global $wpdb;
+	$like = '%' . $wpdb->esc_like( $term ) . '%';
+	$meta_ids = $wpdb->get_col(
+		$wpdb->prepare(
+			"SELECT DISTINCT CASE WHEN p.post_type = 'product_variation' THEN p.post_parent ELSE p.ID END
+			FROM {$wpdb->postmeta} pm
+			INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+			WHERE pm.meta_key IN ('_sku', '_product_attributes')
+			AND pm.meta_value LIKE %s
+			AND p.post_type IN ('product', 'product_variation')",
+			$like
+		)
+	);
+	$ids = array_merge( $ids, $meta_ids );
+
+	$taxonomies = array_filter(
+		get_object_taxonomies( 'product', 'names' ),
+		static function ( $taxonomy ) {
+			return in_array( $taxonomy, array( 'product_cat', 'product_tag', 'product_brand' ), true )
+				|| 0 === strpos( $taxonomy, 'pa_' );
+		}
+	);
+	if ( $taxonomies ) {
+		$terms = get_terms(
+			array(
+				'taxonomy'   => $taxonomies,
+				'hide_empty' => true,
+				'name__like' => $term,
+			)
+		);
+		if ( ! is_wp_error( $terms ) ) {
+			foreach ( $terms as $matched_term ) {
+				$ids = array_merge( $ids, get_objects_in_term( $matched_term->term_id, $matched_term->taxonomy ) );
+			}
+		}
+	}
+
+	return array_values( array_unique( array_filter( array_map( 'absint', $ids ) ) ) );
+}
+
 function sln_ajax_search_suggest() {
 	check_ajax_referer( 'sln_search', 'nonce' );
 	if ( ! function_exists( 'wc_get_products' ) || ! sln_mod( 'sln_header_search_suggestions', true ) ) {
@@ -102,37 +164,16 @@ function sln_ajax_search_suggest() {
 	if ( strlen( trim( $term ) ) < 2 ) {
 		wp_send_json( array() );
 	}
-	$limit     = 6;
-	$products  = wc_get_products( array( 'status' => 'publish', 's' => $term, 'limit' => $limit, 'orderby' => 'relevance' ) );
-	$found_ids = array();
-	foreach ( $products as $product ) {
-		$found_ids[] = $product->get_id();
-	}
-	if ( count( $products ) < $limit ) {
-		foreach ( array( 'product_brand' => 'product_brand', 'product_cat' => 'category' ) as $taxonomy => $query_key ) {
-			if ( count( $products ) >= $limit || ! taxonomy_exists( $taxonomy ) ) {
-				continue;
-			}
-			$matching_terms = get_terms( array( 'taxonomy' => $taxonomy, 'hide_empty' => true, 'name__like' => $term ) );
-			if ( is_wp_error( $matching_terms ) || ! $matching_terms ) {
-				continue;
-			}
-			$more = wc_get_products(
-				array(
-					'status'   => 'publish',
-					$query_key => wp_list_pluck( $matching_terms, 'slug' ),
-					'limit'    => $limit - count( $products ),
-					'exclude'  => $found_ids,
-				)
-			);
-			foreach ( $more as $product ) {
-				if ( ! in_array( $product->get_id(), $found_ids, true ) ) {
-					$products[]  = $product;
-					$found_ids[] = $product->get_id();
-				}
-			}
-		}
-	}
+	$limit       = 6;
+	$matched_ids = sln_product_search_ids( $term );
+	$products    = wc_get_products(
+		array(
+			'status'  => 'publish',
+			'include' => $matched_ids ? $matched_ids : array( 0 ),
+			'limit'   => $limit,
+			'orderby' => 'include',
+		)
+	);
 	$results = array();
 	foreach ( $products as $product ) {
 		$image_id  = $product->get_image_id();
@@ -233,29 +274,8 @@ function sln_catalog_query() {
 	}
 
 	if ( is_search() ) {
-		$search_term = get_search_query();
-		$matched_ids = wc_get_products( array( 'status' => 'publish', 's' => $search_term, 'limit' => -1, 'return' => 'ids' ) );
-		foreach ( array( 'product_brand' => 'product_brand', 'product_cat' => 'category' ) as $taxonomy => $query_key ) {
-			if ( ! taxonomy_exists( $taxonomy ) ) {
-				continue;
-			}
-			$matching_terms = get_terms( array( 'taxonomy' => $taxonomy, 'hide_empty' => true, 'name__like' => $search_term ) );
-			if ( is_wp_error( $matching_terms ) || ! $matching_terms ) {
-				continue;
-			}
-			$matched_ids = array_merge(
-				$matched_ids,
-				wc_get_products(
-					array(
-						'status'   => 'publish',
-						$query_key => wp_list_pluck( $matching_terms, 'slug' ),
-						'limit'    => -1,
-						'return'   => 'ids',
-					)
-				)
-			);
-		}
-		$args['include'] = array_values( array_unique( array_map( 'absint', $matched_ids ) ) );
+		$matched_ids     = function_exists( 'sln_product_search_ids' ) ? sln_product_search_ids( get_search_query() ) : array();
+		$args['include'] = $matched_ids;
 		if ( ! $args['include'] ) {
 			$args['include'] = array( 0 );
 		}

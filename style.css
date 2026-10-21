@@ -93,6 +93,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 .sl-frame { overflow: hidden; aspect-ratio: 5/4; }
 .sl-frame img, .sl-hero-photo img, .sl-gallery-main img, .sl-portrait img { width: 100%; height: 100%; object-fit: cover; }
+.sl-map iframe { width: 100%; height: 100%; min-height: 280px; border: 0; display: block; }
 .sl-panel, .sl-card, .sl-callout, .sl-inventory, .sl-inquiry, .sl-stats, .sl-form-card {
 	background: var(--sl-soft); border: 1px solid var(--sl-border); border-radius: 12px;
 }
@@ -236,9 +237,12 @@ ul { margin: 0; padding: 0; list-style: none; }
 .sl-head h2 { margin: 0; }
 
 .sl-card { position: relative; overflow: hidden; display: flex; flex-direction: column; color: var(--sl-muted); }
-.sl-card-media { position: relative; aspect-ratio: 4/3; background: var(--sl-raise); border-bottom: 1px solid var(--sl-border); display: block; overflow: hidden; }
-.sl-card-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.sl-compare { position: absolute; top: 10px; left: 10px; display: flex; gap: 6px; align-items: center; background: color-mix(in srgb, var(--sl-bg) 85%, transparent); border: 1px solid var(--sl-border); border-radius: 6px; padding: 3px 8px; font-size: 0.8rem; color: var(--sl-text); cursor: pointer; }
+.sl-card-media { aspect-ratio: 4/3; background: var(--sl-raise); border-bottom: 1px solid var(--sl-border); display: block; overflow: hidden; }
+.sl-card-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sl-card-media .sl-card-hover { display: none; }
+.sl-card:hover .sl-card-media.has-swap .sl-card-photo { display: none; }
+.sl-card:hover .sl-card-media.has-swap .sl-card-hover { display: block; }
+.sl-compare { position: absolute; top: 10px; left: 10px; z-index: 2; display: flex; gap: 6px; align-items: center; background: color-mix(in srgb, var(--sl-bg) 85%, transparent); border: 1px solid var(--sl-border); border-radius: 6px; padding: 3px 8px; font-size: 0.8rem; color: var(--sl-text); cursor: pointer; }
 .sl-compare-inline { position: static; margin-top: 12px; width: fit-content; }
 .sl-compare input { accent-color: var(--sl-accent); }
 .sl-card-body { padding: 18px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
@@ -281,6 +285,49 @@ ul { margin: 0; padding: 0; list-style: none; }
 .sl-form { display: grid; gap: 12px; }
 .sl-form label { display: grid; gap: 6px; color: var(--sl-text); font-size: 0.86rem; }
 .sl-form-success { color: var(--sl-ok); }
+.sl-form-error { color: var(--sl-out); }
+
+/* The CRM plugin hides #tw-crm-popup inline after a submit; this form lives in the page. */
+#sl-reserve #tw-crm-popup[data-tw-crm-inline] {
+	display: block !important;
+	position: static;
+	inset: auto;
+	z-index: auto;
+	padding: 0;
+	background: transparent;
+}
+#sl-reserve #tw-crm-popup[data-tw-crm-inline] .tw-crm-form__title,
+#sl-reserve #tw-crm-popup[data-tw-crm-inline] .tw-crm-popup__close {
+	display: none;
+}
+#sl-reserve #tw-crm-popup[data-tw-crm-inline] .tw-crm-form__field label {
+	color: var(--sl-text);
+	font-size: 0.86rem;
+}
+#sl-reserve #tw-crm-popup[data-tw-crm-inline] .tw-crm-form__field input,
+#sl-reserve #tw-crm-popup[data-tw-crm-inline] .tw-crm-form__field textarea,
+#sl-reserve #tw-crm-popup[data-tw-crm-inline] .tw-crm-form__field select {
+	width: 100%;
+	background: var(--sl-bg);
+	color: var(--sl-text);
+	border: 1px solid var(--sl-border);
+	border-radius: 8px;
+	padding: 10px 12px;
+}
+#sl-reserve #tw-crm-popup[data-tw-crm-inline] .tw-crm-form__submit {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--sl-accent);
+	color: var(--sl-on);
+	border: 0;
+	border-radius: 8px;
+	padding: 12px 22px;
+	font-weight: 600;
+	cursor: pointer;
+}
+#sl-reserve #tw-crm-popup[data-tw-crm-inline] .tw-crm-form__feedback.is-success { color: var(--sl-ok); }
+#sl-reserve #tw-crm-popup[data-tw-crm-inline] .tw-crm-form__feedback.is-error { color: var(--sl-out); }
 
 .sl-crumbs { font-family: var(--sl-mono); font-size: 0.86rem; margin-bottom: 18px; }
 .sl-crumbs ol { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; list-style: none; margin: 0; padding: 0; }

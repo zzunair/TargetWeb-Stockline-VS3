@@ -43,7 +43,7 @@ function sln_product_brand_options() {
 }
 
 function sln_section_defs() {
-	return array(
+	$defs = array(
 		'home' => array(
 			'label'    => 'Home Page',
 			'sections' => array(
@@ -251,7 +251,7 @@ function sln_section_defs() {
 							),
 							'default_blocks'  => array(
 								array( 'number' => '01', 'title' => 'Service & Repair', 'desc' => 'Factory-trained techs, seasonal tune-ups, and warranty work.', 'cta' => 'Contact service', 'link' => '/service/' ),
-								array( 'number' => '02', 'title' => 'Financing Inquiries', 'desc' => 'Ask about dealer financing programs for larger equipment.', 'cta' => 'Ask about financing', 'link' => '/contact/' ),
+								array( 'number' => '02', 'title' => 'Financing Inquiries', 'desc' => 'Ask about dealer financing programs for larger equipment.', 'cta' => 'Ask about financing', 'link' => '/financing/' ),
 								array( 'number' => '03', 'title' => 'Delivery & Pickup', 'desc' => 'Local delivery or curbside pickup, arranged with the store.', 'cta' => 'Arrange with us', 'link' => '/contact/' ),
 							),
 						),
@@ -280,6 +280,7 @@ function sln_section_defs() {
 						'directions_text' => array( 'type' => 'text', 'label' => 'Directions button', 'default' => 'Get Directions' ),
 						'directions_link' => array( 'type' => 'url', 'label' => 'Directions link', 'default' => '' ),
 						'map_image'       => array( 'type' => 'image', 'label' => 'Map image', 'default' => '' ),
+						'map_embed'       => array( 'type' => 'textarea', 'label' => 'Google Maps embed (iframe or embed URL, used instead of the image)', 'default' => '' ),
 						'map_label'       => array( 'type' => 'text', 'label' => 'Map placeholder', 'default' => 'Map' ),
 					),
 				),
@@ -301,7 +302,7 @@ function sln_section_defs() {
 		),
 
 		'shop' => array(
-			'label'    => 'Shop Page',
+			'label'    => 'Catalog',
 			'sections' => array(
 				'breadcrumb' => array(
 					'label'  => 'Breadcrumb',
@@ -332,6 +333,8 @@ function sln_section_defs() {
 				'products_grid' => array(
 					'label'  => 'Product Grid',
 					'fields' => array(
+						'show_second_image'    => array( 'type' => 'checkbox', 'label' => 'Show second image on hover', 'default' => true ),
+						'show_exact_inventory' => array( 'type' => 'checkbox', 'label' => 'Show exact inventory', 'default' => true ),
 						'heading'           => array( 'type' => 'text', 'label' => 'Heading', 'default' => 'All Products' ),
 						'per_page'          => array( 'type' => 'number', 'label' => 'Products per page', 'default' => 12, 'input_attrs' => array( 'min' => 1, 'max' => 48 ) ),
 						'count_suffix'      => array( 'type' => 'text', 'label' => 'Count suffix', 'default' => ' results' ),
@@ -375,25 +378,12 @@ function sln_section_defs() {
 						'limited_label'         => array( 'type' => 'text', 'label' => 'Limited supply label', 'default' => 'Limited supply' ),
 						'updated_label'         => array( 'type' => 'text', 'label' => 'Updated label', 'default' => 'Last updated' ),
 						'call_text'             => array( 'type' => 'text', 'label' => 'Call button', 'default' => 'Call the Store' ),
-						'email_text'            => array( 'type' => 'text', 'label' => 'Email button', 'default' => 'Email About This Product' ),
 						'directions_text'       => array( 'type' => 'text', 'label' => 'Directions button', 'default' => 'Get Directions' ),
 						'directions_link'       => array( 'type' => 'url', 'label' => 'Directions link', 'default' => '/contact/#visit' ),
 						'price_note'            => array( 'type' => 'text', 'label' => 'Price note when the site is not selling online', 'default' => 'Price on request · MSRP shown in store' ),
-						'request_text'          => array( 'type' => 'text', 'label' => 'Request information button (ecommerce on)', 'default' => 'Request information' ),
-						'reserve_heading'       => array( 'type' => 'text', 'label' => 'Reserve heading', 'default' => 'Ask about this machine' ),
-						'reserve_intro'         => array( 'type' => 'textarea', 'label' => 'Reserve intro', 'default' => 'Tell us how to reach you. No payment is taken online.' ),
-						'name_label'            => array( 'type' => 'text', 'label' => 'Name label', 'default' => 'Name' ),
-						'name_placeholder'      => array( 'type' => 'text', 'label' => 'Name placeholder', 'default' => 'Full name' ),
-						'phone_label'           => array( 'type' => 'text', 'label' => 'Phone label', 'default' => 'Phone' ),
-						'phone_placeholder'     => array( 'type' => 'text', 'label' => 'Phone placeholder', 'default' => '(123) 456-7890' ),
-						'email_label'           => array( 'type' => 'text', 'label' => 'Email label', 'default' => 'Email' ),
-						'email_placeholder'     => array( 'type' => 'text', 'label' => 'Email placeholder', 'default' => 'you@example.com' ),
-						'notes_label'           => array( 'type' => 'text', 'label' => 'Notes label', 'default' => 'Notes' ),
-						'notes_placeholder'     => array( 'type' => 'text', 'label' => 'Notes placeholder', 'default' => 'Anything we should know?' ),
-						'reserve_button_text'   => array( 'type' => 'text', 'label' => 'Reserve button', 'default' => 'Send request' ),
-						'success_heading'       => array( 'type' => 'text', 'label' => 'Success heading', 'default' => 'Request received' ),
-						'success_text'          => array( 'type' => 'textarea', 'label' => 'Success text (use {name})', 'default' => 'Thanks{name}. Our team will call within one business day to confirm.' ),
-						'reset_button_text'     => array( 'type' => 'text', 'label' => 'Reset button', 'default' => 'Send another request' ),
+						'request_text'          => array( 'type' => 'text', 'label' => 'Request information button', 'default' => 'Request information' ),
+						'reserve_heading'       => array( 'type' => 'text', 'label' => 'Request form heading', 'default' => 'Request information' ),
+						'reserve_intro'         => array( 'type' => 'textarea', 'label' => 'Request form intro', 'default' => 'Tell us how to reach you and our team will get back to you shortly.' ),
 						'outofstock_heading'    => array( 'type' => 'text', 'label' => 'Out-of-stock heading', 'default' => 'Currently unavailable, contact us.' ),
 						'outofstock_text'       => array( 'type' => 'textarea', 'label' => 'Out-of-stock text', 'default' => 'This machine is not on the floor right now. Call or write and we will check incoming stock.' ),
 						'close_label'           => array( 'type' => 'text', 'label' => 'Close button label', 'default' => 'Close' ),
@@ -519,6 +509,84 @@ function sln_section_defs() {
 			'default_order' => array( 'hero', 'service_cards', 'steps', 'request' ),
 		),
 
+		'financing' => array(
+			'label'    => 'Financing Page',
+			'sections' => array(
+				'hero' => array(
+					'label'  => 'Hero',
+					'fields' => array(
+						'home_label'   => array( 'type' => 'text', 'label' => 'Home label', 'default' => 'Home' ),
+						'crumb'        => array( 'type' => 'text', 'label' => 'Breadcrumb label', 'default' => 'Financing' ),
+						'eyebrow'      => array( 'type' => 'text', 'label' => 'Eyebrow', 'default' => 'Financing' ),
+						'heading'      => array( 'type' => 'text', 'label' => 'Heading', 'default' => 'Programs arranged at the store.' ),
+						'body'         => array( 'type' => 'textarea', 'label' => 'Body', 'default' => 'This page explains the financing options we can start in person. Nothing is applied for or paid on this website.' ),
+						'button_text'  => array( 'type' => 'text', 'label' => 'Primary button', 'default' => 'Talk to the store' ),
+						'button_link'  => array( 'type' => 'url', 'label' => 'Primary link', 'default' => '/contact/' ),
+						'button2_text' => array( 'type' => 'text', 'label' => 'Secondary button', 'default' => 'See the catalog' ),
+						'button2_link' => array( 'type' => 'url', 'label' => 'Secondary link (empty uses the shop)', 'default' => '' ),
+					),
+				),
+				'programs' => array(
+					'label'  => 'Programs',
+					'fields' => array(
+						'heading'    => array( 'type' => 'text', 'label' => 'Heading', 'default' => 'What we can walk through' ),
+						'disclaimer' => array( 'type' => 'textarea', 'label' => 'Disclaimer', 'default' => 'Programs, rates, and approval are set by the lender and confirmed at the store. This page is informational only.' ),
+						'cards'      => array(
+							'type'            => 'repeater',
+							'label'           => 'Programs',
+							'title_field'     => 'title',
+							'add_button_text' => 'Add program',
+							'min'             => 0,
+							'block_fields'    => array(
+								'number' => array( 'type' => 'text', 'label' => 'Number', 'default' => '01' ),
+								'title'  => array( 'type' => 'text', 'label' => 'Title', 'default' => 'New program' ),
+								'desc'   => array( 'type' => 'textarea', 'label' => 'Description', 'default' => '' ),
+							),
+							'default_blocks'  => array(
+								array( 'number' => '01', 'title' => 'In-store financing', 'desc' => 'Applications are completed with a salesperson. Credit decisions are not made on this site.' ),
+								array( 'number' => '02', 'title' => 'Seasonal programs', 'desc' => 'Manufacturer offers change through the year. Ask which ones are open before you visit.' ),
+								array( 'number' => '03', 'title' => 'Commercial accounts', 'desc' => 'Fleet and commercial buyers can set up terms with the store directly.' ),
+							),
+						),
+					),
+				),
+				'steps' => array(
+					'label'  => 'How It Works',
+					'fields' => array(
+						'heading' => array( 'type' => 'text', 'label' => 'Heading', 'default' => 'How an inquiry works' ),
+						'steps'   => array(
+							'type'            => 'repeater',
+							'label'           => 'Steps',
+							'title_field'     => 'title',
+							'add_button_text' => 'Add step',
+							'min'             => 0,
+							'block_fields'    => array(
+								'number' => array( 'type' => 'text', 'label' => 'Number', 'default' => '1' ),
+								'title'  => array( 'type' => 'text', 'label' => 'Title', 'default' => 'New step' ),
+								'desc'   => array( 'type' => 'textarea', 'label' => 'Description', 'default' => '' ),
+							),
+							'default_blocks'  => array(
+								array( 'number' => '1', 'title' => 'Pick a machine', 'desc' => 'Check the catalog, or tell us the model you have in mind.' ),
+								array( 'number' => '2', 'title' => 'Talk to the store', 'desc' => 'Call or send a message. We confirm what is currently offered.' ),
+								array( 'number' => '3', 'title' => 'Apply in person', 'desc' => 'Bring identification. The lender reviews the application at the counter.' ),
+								array( 'number' => '4', 'title' => 'Take it home', 'desc' => 'Once approved, pickup or delivery is arranged with the store.' ),
+							),
+						),
+					),
+				),
+				'cta' => array(
+					'label'  => 'Closing Note',
+					'fields' => array(
+						'heading'     => array( 'type' => 'text', 'label' => 'Heading', 'default' => 'Have a model in mind?' ),
+						'body'        => array( 'type' => 'textarea', 'label' => 'Body', 'default' => 'Tell us what you are looking at and we will say which programs apply before you drive over.' ),
+						'button_text' => array( 'type' => 'text', 'label' => 'Button text', 'default' => 'Contact the store' ),
+						'button_link' => array( 'type' => 'url', 'label' => 'Button link', 'default' => '/contact/' ),
+					),
+				),
+			),
+			'default_order' => array( 'hero', 'programs', 'steps', 'cta' ),
+		),
+
 		'contact' => array(
 			'label'    => 'Contact Page',
 			'sections' => array(
@@ -543,6 +611,11 @@ function sln_section_defs() {
 						'message_ph'     => array( 'type' => 'text', 'label' => 'Message placeholder', 'default' => 'How can we help?' ),
 						'button_text'    => array( 'type' => 'text', 'label' => 'Button text', 'default' => 'Send message' ),
 						'success'        => array( 'type' => 'text', 'label' => 'Success message', 'default' => 'Message received. We will reply within one business day.' ),
+						'recipient_email' => array( 'type' => 'text', 'label' => 'Recipient email (defaults to the site admin email)', 'default' => '' ),
+						'sender_name'     => array( 'type' => 'text', 'label' => 'Sender name (defaults to the site name)', 'default' => '' ),
+						'sender_email'    => array( 'type' => 'text', 'label' => 'Sender email (defaults to the site admin email)', 'default' => '' ),
+						'subject'         => array( 'type' => 'text', 'label' => 'Email subject', 'default' => 'New contact message' ),
+						'error_text'      => array( 'type' => 'text', 'label' => 'Error text', 'default' => 'The message could not be sent. Please call or email us instead.' ),
 					),
 				),
 				'locations' => array(
@@ -556,6 +629,7 @@ function sln_section_defs() {
 						'address_card'    => array( 'type' => 'text', 'label' => 'Address card text', 'default' => '123 Main Street, Your City' ),
 						'directions_text' => array( 'type' => 'text', 'label' => 'Directions text', 'default' => 'Get Directions' ),
 						'map_image'       => array( 'type' => 'image', 'label' => 'Map image', 'default' => '' ),
+						'map_embed'       => array( 'type' => 'textarea', 'label' => 'Google Maps embed (iframe or embed URL, used instead of the image)', 'default' => '' ),
 						'map_label'       => array( 'type' => 'text', 'label' => 'Map placeholder', 'default' => 'Map' ),
 						'items'           => array(
 							'type'            => 'repeater',
@@ -718,4 +792,20 @@ function sln_section_defs() {
 			'default_order' => array( 'intro', 'brand_cards', 'note' ),
 		),
 	);
+
+	foreach ( $defs['home']['sections'] as $section_id => $section ) {
+		$fields = isset( $section['fields'] ) ? $section['fields'] : array();
+		$defs['home']['sections'][ $section_id ]['fields'] = array_merge(
+			array(
+				'show' => array(
+					'type'    => 'checkbox',
+					'label'   => 'Show this section',
+					'default' => true,
+				),
+			),
+			$fields
+		);
+	}
+
+	return $defs;
 }

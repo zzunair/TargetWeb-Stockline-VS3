@@ -3,8 +3,10 @@ $shop     = isset( $GLOBALS['sln_shop'] ) ? $GLOBALS['sln_shop'] : array( 'produ
 $products = $shop['products'];
 $orderby  = isset( $shop['orderby'] ) ? $shop['orderby'] : 'title';
 $sln_card = array(
-	'link_text'  => sln_field( 'shop', 'products_grid', 'link_text' ),
-	'price_note' => sln_field( 'shop', 'products_grid', 'price_note' ),
+	'link_text'       => sln_field( 'shop', 'products_grid', 'link_text' ),
+	'price_note'      => sln_field( 'shop', 'products_grid', 'price_note' ),
+	'second_image'    => (bool) sln_field( 'shop', 'products_grid', 'show_second_image' ),
+	'exact_inventory' => (bool) sln_field( 'shop', 'products_grid', 'show_exact_inventory' ),
 );
 $chips = array();
 if ( ! empty( $_GET['product_cat'] ) ) {

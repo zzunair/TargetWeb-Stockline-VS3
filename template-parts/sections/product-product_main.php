@@ -85,7 +85,7 @@ $eyebrow  = trim( implode( ' · ', array_filter( array( $brands ? $brands[0] : '
 					<?php if ( $selling ) : ?>
 						<button type="button" class="sl-btn sl-btn-ghost sl-request-open" aria-expanded="false" aria-controls="sl-request"><?php echo esc_html( sln_field( 'product', 'product_main', 'request_text' ) ); ?></button>
 					<?php else : ?>
-						<a class="sl-btn sl-btn-ghost" href="#sl-reserve"><?php echo esc_html( sln_field( 'product', 'product_main', 'email_text' ) ); ?></a>
+						<a class="sl-btn sl-btn-ghost" href="#sl-reserve"><?php echo esc_html( sln_field( 'product', 'product_main', 'request_text' ) ); ?></a>
 					<?php endif; ?>
 					<a href="<?php echo esc_url( sln_field( 'product', 'product_main', 'directions_link' ) ); ?>"><?php echo esc_html( sln_field( 'product', 'product_main', 'directions_text' ) ); ?></a>
 				</div>
@@ -102,16 +102,11 @@ $eyebrow  = trim( implode( ' · ', array_filter( array( $brands ? $brands[0] : '
 			<div class="sl-reserve" id="sl-reserve">
 				<?php if ( $selling ) : ?><button type="button" class="sl-modal-x" data-close-request aria-label="<?php echo esc_attr( sln_field( 'product', 'product_main', 'close_label' ) ); ?>">×</button><?php endif; ?>
 				<?php if ( $product->is_in_stock() ) : ?>
-					<form class="sl-form sl-reserve-form" data-sl-form data-success="<?php echo esc_attr( sln_field( 'product', 'product_main', 'success_text' ) ); ?>">
-						<h2><?php echo esc_html( sln_field( 'product', 'product_main', 'reserve_heading' ) ); ?></h2>
-						<p><?php echo esc_html( sln_field( 'product', 'product_main', 'reserve_intro' ) ); ?></p>
-						<label><?php echo esc_html( sln_field( 'product', 'product_main', 'name_label' ) ); ?><input class="sl-reserve-name" type="text" name="name" placeholder="<?php echo esc_attr( sln_field( 'product', 'product_main', 'name_placeholder' ) ); ?>" /></label>
-						<label><?php echo esc_html( sln_field( 'product', 'product_main', 'phone_label' ) ); ?><input type="tel" name="phone" placeholder="<?php echo esc_attr( sln_field( 'product', 'product_main', 'phone_placeholder' ) ); ?>" /></label>
-						<label><?php echo esc_html( sln_field( 'product', 'product_main', 'email_label' ) ); ?><input type="email" name="email" placeholder="<?php echo esc_attr( sln_field( 'product', 'product_main', 'email_placeholder' ) ); ?>" /></label>
-						<label><?php echo esc_html( sln_field( 'product', 'product_main', 'notes_label' ) ); ?><textarea name="notes" rows="3" placeholder="<?php echo esc_attr( sln_field( 'product', 'product_main', 'notes_placeholder' ) ); ?>"></textarea></label>
-						<button type="submit" class="sl-btn"><?php echo esc_html( sln_field( 'product', 'product_main', 'reserve_button_text' ) ); ?></button>
-						<p class="sl-form-success" hidden data-heading="<?php echo esc_attr( sln_field( 'product', 'product_main', 'success_heading' ) ); ?>" data-reset="<?php echo esc_attr( sln_field( 'product', 'product_main', 'reset_button_text' ) ); ?>"></p>
-					</form>
+					<h2><?php echo esc_html( sln_field( 'product', 'product_main', 'reserve_heading' ) ); ?></h2>
+					<p><?php echo esc_html( sln_field( 'product', 'product_main', 'reserve_intro' ) ); ?></p>
+					<div id="tw-crm-popup" data-tw-crm-inline data-product-id="<?php echo esc_attr( $product->get_id() ); ?>">
+						<div id="leads-form-div"></div>
+					</div>
 				<?php else : ?>
 					<h2><?php echo esc_html( sln_field( 'product', 'product_main', 'outofstock_heading' ) ); ?></h2>
 					<p><?php echo esc_html( sln_field( 'product', 'product_main', 'outofstock_text' ) ); ?></p>

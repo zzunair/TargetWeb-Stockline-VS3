@@ -194,9 +194,7 @@ function sln_panel_active_callback( $page ) {
 		case 'home':
 			return 'is_front_page';
 		case 'shop':
-			return function () {
-				return function_exists( 'is_shop' ) && ( is_shop() || is_product_taxonomy() || is_search() );
-			};
+			return '__return_true';
 		case 'product':
 			return function () {
 				return is_singular( 'product' );

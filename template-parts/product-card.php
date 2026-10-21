@@ -15,8 +15,13 @@ $brands    = taxonomy_exists( 'product_brand' ) ? wc_get_product_terms( $product
 if ( is_wp_error( $brands ) ) {
 	$brands = array();
 }
-$stock    = sln_stock_view( $product );
-$image_id = $product->get_image_id();
+$stock           = sln_stock_view( $product );
+$image_id        = $product->get_image_id();
+$second_image    = ! array_key_exists( 'second_image', $card ) || $card['second_image'];
+$exact_inventory = ! array_key_exists( 'exact_inventory', $card ) || $card['exact_inventory'];
+$gallery         = $second_image ? $product->get_gallery_image_ids() : array();
+$hover_id        = $gallery ? (int) $gallery[0] : 0;
+$show_hover      = $hover_id && $hover_id !== (int) $image_id;
 $chips    = sln_product_chips( $product, 3 );
 $specs    = sln_product_specs( $product, 3 );
 $labels   = array(
@@ -27,9 +32,12 @@ $labels   = array(
 $qty_text = null !== $stock['qty'] ? (int) $stock['qty'] . sln_field( 'product', 'product_main', 'stock_location_suffix' ) : $labels[ $stock['state'] ];
 ?>
 <article class="sl-card<?php echo 'list' === $layout ? ' is-list' : ''; ?>">
-	<a class="sl-card-media" href="<?php echo esc_url( get_permalink( $product->get_id() ) ); ?>">
+	<a class="sl-card-media<?php echo $show_hover ? ' has-swap' : ''; ?>" href="<?php echo esc_url( get_permalink( $product->get_id() ) ); ?>">
 		<?php if ( $image_id ) : ?>
-			<?php echo wp_get_attachment_image( $image_id, 'medium', false, sln_image_attrs( $image_id, $product->get_name() ) ); ?>
+			<?php echo wp_get_attachment_image( $image_id, 'medium', false, sln_image_attrs( $image_id, $product->get_name(), array( 'class' => 'sl-card-photo' ) ) ); ?>
+			<?php if ( $show_hover ) : ?>
+				<?php echo wp_get_attachment_image( $hover_id, 'medium', false, sln_image_attrs( $hover_id, '', array( 'class' => 'sl-card-hover', 'loading' => 'eager' ) ) ); ?>
+			<?php endif; ?>
 		<?php else : ?>
 			<?php sln_placeholder( $product->get_name() ); ?>
 		<?php endif; ?>
@@ -55,7 +63,7 @@ $qty_text = null !== $stock['qty'] ? (int) $stock['qty'] . sln_field( 'product',
 			</tbody></table>
 		<?php endif; ?>
 		<div class="sl-meter">
-			<div class="sl-meter-top"><span class="is-<?php echo esc_attr( $stock['state'] ); ?>">● <?php echo esc_html( $labels[ $stock['state'] ] ); ?></span><span class="sl-mono"><?php echo esc_html( $qty_text ); ?></span></div>
+			<div class="sl-meter-top"><span class="is-<?php echo esc_attr( $stock['state'] ); ?>">● <?php echo esc_html( $labels[ $stock['state'] ] ); ?></span><?php if ( $exact_inventory ) : ?><span class="sl-mono"><?php echo esc_html( $qty_text ); ?></span><?php endif; ?></div>
 			<div class="sl-bar"><span class="is-<?php echo esc_attr( $stock['state'] ); ?>" style="width:<?php echo (int) $stock['percent']; ?>%"></span></div>
 		</div>
 		<div class="sl-card-foot">

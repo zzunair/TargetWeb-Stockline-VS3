@@ -76,8 +76,9 @@ function sln_seo_description() {
 		}
 		if ( $post && ! sln_seo_trim( $text ) && 'page' === $post->post_type ) {
 			$map = array(
-				'service' => array( 'service', 'hero', 'body' ),
-				'contact' => array( 'contact', 'intro', 'heading' ),
+				'service'   => array( 'service', 'hero', 'body' ),
+				'financing' => array( 'financing', 'hero', 'body' ),
+				'contact'   => array( 'contact', 'intro', 'heading' ),
 				'about'   => array( 'about', 'story', 'body1' ),
 				'brands'  => array( 'brands', 'intro', 'body' ),
 			);

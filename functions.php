@@ -10,6 +10,7 @@ require_once get_template_directory() . '/inc/template-functions.php';
 require_once get_template_directory() . '/inc/customizer.php';
 require_once get_template_directory() . '/inc/woocommerce.php';
 require_once get_template_directory() . '/inc/seo.php';
+require_once get_template_directory() . '/inc/maintenance.php';
 
 function sln_setup() {
 	add_theme_support( 'title-tag' );
@@ -37,12 +38,22 @@ function sln_flush_permalinks_on_activation() {
 }
 add_action( 'after_switch_theme', 'sln_flush_permalinks_on_activation' );
 
+function sln_ensure_pages_once() {
+	if ( get_option( 'sln_pages_ready' ) ) {
+		return;
+	}
+	sln_ensure_pages();
+	update_option( 'sln_pages_ready', '1' );
+}
+add_action( 'admin_init', 'sln_ensure_pages_once' );
+
 function sln_ensure_pages() {
 	$pages = array(
-		'service' => 'Service',
-		'about'   => 'About',
-		'contact' => 'Contact',
-		'brands'  => 'Brands',
+		'service'   => 'Service',
+		'financing' => 'Financing',
+		'about'     => 'About',
+		'contact'   => 'Contact',
+		'brands'    => 'Brands',
 	);
 	foreach ( $pages as $slug => $title ) {
 		$existing = get_page_by_path( $slug );
@@ -77,8 +88,88 @@ function sln_enqueue_assets() {
 			'viewAll'     => 'View all results',
 		)
 	);
+	wp_localize_script(
+		'sln-frontend',
+		'slnContactForm',
+		array(
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'sln_contact_message' ),
+		)
+	);
 }
 add_action( 'wp_enqueue_scripts', 'sln_enqueue_assets' );
+
+/**
+ * Sends the contact page form. Home, service, and product forms stay as they are.
+ */
+function sln_submit_contact_message() {
+	check_ajax_referer( 'sln_contact_message', 'nonce' );
+
+	$name    = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
+	$email   = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
+	$topic   = isset( $_POST['topic'] ) ? sanitize_text_field( wp_unslash( $_POST['topic'] ) ) : '';
+	$model   = isset( $_POST['model'] ) ? sanitize_text_field( wp_unslash( $_POST['model'] ) ) : '';
+	$message = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : '';
+
+	if ( ! $name || ! is_email( $email ) || ! $message ) {
+		wp_send_json_error( array( 'message' => 'Please complete the required fields.' ), 400 );
+	}
+
+	$recipient = sanitize_email( sln_field( 'contact', 'form_info', 'recipient_email' ) );
+	if ( ! is_email( $recipient ) ) {
+		$recipient = sanitize_email( get_option( 'admin_email' ) );
+	}
+	$sender_name  = sanitize_text_field( sln_field( 'contact', 'form_info', 'sender_name' ) );
+	$sender_email = sanitize_email( sln_field( 'contact', 'form_info', 'sender_email' ) );
+	if ( '' === $sender_name ) {
+		$sender_name = get_bloginfo( 'name' );
+	}
+	if ( ! is_email( $sender_email ) ) {
+		$sender_email = sanitize_email( get_option( 'admin_email' ) );
+	}
+	$subject = sanitize_text_field( sln_field( 'contact', 'form_info', 'subject' ) );
+	if ( '' === $subject ) {
+		$subject = 'New contact message';
+	}
+	$body = implode(
+		"\n",
+		array(
+			'Name: ' . $name,
+			'Email: ' . $email,
+			'Topic: ' . ( $topic ? $topic : 'Not provided' ),
+			'Model: ' . ( $model ? $model : 'Not provided' ),
+			'',
+			'Message:',
+			$message,
+		)
+	);
+	$from_email = static function () use ( $sender_email ) {
+		return $sender_email;
+	};
+	$from_name = static function () use ( $sender_name ) {
+		return $sender_name;
+	};
+	add_filter( 'wp_mail_from', $from_email );
+	add_filter( 'wp_mail_from_name', $from_name );
+	$sent = wp_mail(
+		$recipient,
+		$subject,
+		$body,
+		array(
+			'Content-Type: text/plain; charset=UTF-8',
+			'Reply-To: ' . $name . ' <' . $email . '>',
+		)
+	);
+	remove_filter( 'wp_mail_from', $from_email );
+	remove_filter( 'wp_mail_from_name', $from_name );
+
+	if ( ! $sent ) {
+		wp_send_json_error( array( 'message' => 'The message could not be sent.' ), 500 );
+	}
+	wp_send_json_success();
+}
+add_action( 'wp_ajax_sln_contact_message', 'sln_submit_contact_message' );
+add_action( 'wp_ajax_nopriv_sln_contact_message', 'sln_submit_contact_message' );
 
 function sln_output_dynamic_styles() {
 	$font  = sln_sanitize_font_family( sln_mod( 'sln_font_family', 'Inter' ) );

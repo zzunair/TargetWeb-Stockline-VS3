@@ -19,11 +19,7 @@ $items = sln_repeater( 'contact', 'locations', 'items' );
 		</div>
 	<?php endforeach; ?>
 	<div class="sl-frame sl-map">
-		<?php if ( sln_field( 'contact', 'locations', 'map_image' ) ) : ?>
-			<img src="<?php echo esc_url( sln_field( 'contact', 'locations', 'map_image' ) ); ?>" alt="<?php echo esc_attr( sln_field( 'contact', 'locations', 'map_label' ) ); ?>" />
-		<?php else : ?>
-			<?php sln_placeholder( sln_field( 'contact', 'locations', 'map_label' ) ); ?>
-		<?php endif; ?>
+		<?php sln_map_frame( sln_field( 'contact', 'locations', 'map_embed' ), sln_field( 'contact', 'locations', 'map_image' ), sln_field( 'contact', 'locations', 'map_label' ) ); ?>
 	</div>
 	<?php
 	$link = '';
