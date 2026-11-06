@@ -1,0 +1,19 @@
+/*
+This folder ships inside the parent so the child can be kept in the same GitHub repo.
+WordPress does not load it from here, so it does not change the parent theme.
+Install this folder on its own, next to the parent, when a store needs the child.
+*/
+/*
+Theme Name: Stockline-C
+Theme URI: https://targetweb.com
+Author: TargetWeb
+Author URI: https://targetweb.com
+Description: Dealer child theme for Stockline. Header, footer, and homepage sections placed in this folder replace VS3. The shop, homepage, and assets stay in the parent.
+Template: VS3 - Stockline
+Version: 1.0.0
+Requires at least: 6.0
+Requires PHP: 7.4
+Text Domain: stockline-vs3
+*/
+
+/* Dealer-only CSS goes below. VS3 - Stockline supplies the base styles. */

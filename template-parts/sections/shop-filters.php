@@ -61,31 +61,6 @@ $action  = sln_shop_url();
 		<?php if ( ! empty( $_GET['s'] ) ) : ?><input type="hidden" name="s" value="<?php echo esc_attr( get_search_query() ); ?>" /><?php endif; ?>
 		<?php if ( ! empty( $_GET['post_type'] ) ) : ?><input type="hidden" name="post_type" value="product" /><?php endif; ?>
 
-		<?php
-		$groups = array();
-		if ( sln_field( 'shop', 'filters', 'show_category' ) && $cats ) {
-			$groups[] = array( 'name' => sln_field( 'shop', 'filters', 'category_label' ), 'field' => 'product_cat', 'terms' => $cats, 'selected' => $selected_cats );
-		}
-		if ( sln_field( 'shop', 'filters', 'show_brand' ) && $brands ) {
-			$groups[] = array( 'name' => sln_field( 'shop', 'filters', 'brand_label' ), 'field' => 'product_brand', 'terms' => $brands, 'selected' => $selected_brands );
-		}
-		foreach ( $groups as $group ) :
-			?>
-			<details class="sl-filter" open>
-				<summary><?php echo esc_html( $group['name'] ); ?><span>−</span></summary>
-				<div>
-					<?php foreach ( $group['terms'] as $term ) : $on = in_array( $term->slug, $group['selected'], true ); ?>
-						<label class="<?php echo $on ? 'is-on' : ''; ?>">
-							<input type="checkbox" name="<?php echo esc_attr( $group['field'] ); ?>[]" value="<?php echo esc_attr( $term->slug ); ?>" <?php checked( $on ); ?> />
-							<span class="sl-tick" aria-hidden="true"><?php echo $on ? '✓' : ''; ?></span>
-							<span><?php echo esc_html( $term->name ); ?></span>
-							<span class="sl-mono"><?php echo (int) $term->sln_count; ?></span>
-						</label>
-					<?php endforeach; ?>
-				</div>
-			</details>
-		<?php endforeach; ?>
-
 		<?php if ( sln_field( 'shop', 'filters', 'show_availability' ) ) : ?>
 			<details class="sl-filter" open>
 				<summary><?php echo esc_html( sln_field( 'shop', 'filters', 'availability_label' ) ); ?><span>−</span></summary>
@@ -109,6 +84,31 @@ $action  = sln_shop_url();
 				</div>
 			</details>
 		<?php endif; ?>
+
+		<?php
+		$groups = array();
+		if ( sln_field( 'shop', 'filters', 'show_brand' ) && $brands ) {
+			$groups[] = array( 'name' => sln_field( 'shop', 'filters', 'brand_label' ), 'field' => 'product_brand', 'terms' => $brands, 'selected' => $selected_brands );
+		}
+		if ( sln_field( 'shop', 'filters', 'show_category' ) && $cats ) {
+			$groups[] = array( 'name' => sln_field( 'shop', 'filters', 'category_label' ), 'field' => 'product_cat', 'terms' => $cats, 'selected' => $selected_cats );
+		}
+		foreach ( $groups as $group ) :
+			?>
+			<details class="sl-filter" open>
+				<summary><?php echo esc_html( $group['name'] ); ?><span>−</span></summary>
+				<div>
+					<?php foreach ( $group['terms'] as $term ) : $on = in_array( $term->slug, $group['selected'], true ); ?>
+						<label class="<?php echo $on ? 'is-on' : ''; ?>">
+							<input type="checkbox" name="<?php echo esc_attr( $group['field'] ); ?>[]" value="<?php echo esc_attr( $term->slug ); ?>" <?php checked( $on ); ?> />
+							<span class="sl-tick" aria-hidden="true"><?php echo $on ? '✓' : ''; ?></span>
+							<span><?php echo esc_html( $term->name ); ?></span>
+							<span class="sl-mono"><?php echo (int) $term->sln_count; ?></span>
+						</label>
+					<?php endforeach; ?>
+				</div>
+			</details>
+		<?php endforeach; ?>
 
 		<?php
 		if ( sln_field( 'shop', 'filters', 'show_attributes' ) && function_exists( 'wc_get_attribute_taxonomies' ) ) :

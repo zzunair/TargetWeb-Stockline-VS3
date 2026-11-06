@@ -27,6 +27,7 @@ if ( taxonomy_exists( 'product_brand' ) ) {
 
 $company_links = array(
 	array( 'Service', home_url( '/service/' ) ),
+	array( 'Financing', home_url( '/financing/' ) ),
 	array( 'About', home_url( '/about/' ) ),
 	array( 'Contact', home_url( '/contact/' ) ),
 	array( 'Brands', home_url( '/brands/' ) ),

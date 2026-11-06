@@ -194,9 +194,7 @@ function sln_panel_active_callback( $page ) {
 		case 'home':
 			return 'is_front_page';
 		case 'shop':
-			return function () {
-				return function_exists( 'is_shop' ) && ( is_shop() || is_product_taxonomy() || is_search() );
-			};
+			return '__return_true';
 		case 'product':
 			return function () {
 				return is_singular( 'product' );
@@ -351,7 +349,7 @@ function sln_customize_register( $wp_customize ) {
 			'logo_image'          => array( 'label' => 'Logo image (empty keeps the text logo)', 'default' => '', 'type' => 'image' ),
 			'logo_max_width'      => array( 'label' => 'Logo max width (px)', 'default' => 180, 'type' => 'range', 'input_attrs' => array( 'min' => 40, 'max' => 400, 'step' => 5 ) ),
 			'logo_max_height'     => array( 'label' => 'Logo max height (px)', 'default' => 36, 'type' => 'range', 'input_attrs' => array( 'min' => 20, 'max' => 150, 'step' => 2 ) ),
-			'logo_text'           => array( 'label' => 'Logo text', 'default' => get_bloginfo( 'name' ), 'type' => 'text' ),
+			'logo_text'           => array( 'label' => 'Logo text', 'default' => 'MowtivatedPwr', 'type' => 'text' ),
 			'logo_tagline'        => array( 'label' => 'Tagline (empty hides it)', 'default' => '', 'type' => 'text' ),
 			'search_placeholder'  => array( 'label' => 'Search placeholder', 'default' => 'Search model, brand or category', 'type' => 'text' ),
 			'search_button_text'  => array( 'label' => 'Search button text', 'default' => 'Search', 'type' => 'text' ),

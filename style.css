@@ -1,7 +1,7 @@
 /*
 Theme Name: TargetWeb - Stockline
 Author: TargetWeb
-Description: Showroom theme for equipment dealers. Every page is built from reorderable sections in the Customizer. WooCommerce powers the catalog, with optional cart and checkout.
+Description: Parent theme for Stockline dealer sites. VS3-Child can replace the header, footer, and homepage sections. Every page is built from reorderable sections in the Customizer. WooCommerce powers the catalog, with optional cart and checkout.
 Version: 1.0.0
 Requires at least: 6.0
 Requires PHP: 7.4
@@ -93,6 +93,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 .sl-frame { overflow: hidden; aspect-ratio: 5/4; }
 .sl-frame img, .sl-hero-photo img, .sl-gallery-main img, .sl-portrait img { width: 100%; height: 100%; object-fit: cover; }
+.sl-map iframe { width: 100%; height: 100%; min-height: 280px; border: 0; display: block; }
 .sl-panel, .sl-card, .sl-callout, .sl-inventory, .sl-inquiry, .sl-stats, .sl-form-card {
 	background: var(--sl-soft); border: 1px solid var(--sl-border); border-radius: 12px;
 }
@@ -156,6 +157,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .sl-suggest a, .sl-suggest p { display: flex; gap: 12px; align-items: center; padding: 10px; border-radius: 8px; color: var(--sl-text); }
 .sl-suggest a:hover { background: var(--sl-raise); }
 .sl-suggest img, .sl-suggest-ph { width: 48px; height: 48px; object-fit: cover; border-radius: 6px; background: var(--sl-raise); }
+.sl-suggest-ph { display: flex; align-items: center; justify-content: center; padding: 3px; color: var(--sl-faint); font-size: 7px; font-weight: 600; line-height: 1.15; text-align: center; }
 .sl-suggest-all { background: none; border: 0; color: var(--sl-link); text-align: left; padding: 10px; cursor: pointer; }
 
 .sl-hero { position: relative; padding-top: 72px; padding-bottom: 64px;
@@ -236,9 +238,12 @@ ul { margin: 0; padding: 0; list-style: none; }
 .sl-head h2 { margin: 0; }
 
 .sl-card { position: relative; overflow: hidden; display: flex; flex-direction: column; color: var(--sl-muted); }
-.sl-card-media { position: relative; aspect-ratio: 4/3; background: var(--sl-raise); border-bottom: 1px solid var(--sl-border); display: block; overflow: hidden; }
-.sl-card-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.sl-compare { position: absolute; top: 10px; left: 10px; display: flex; gap: 6px; align-items: center; background: color-mix(in srgb, var(--sl-bg) 85%, transparent); border: 1px solid var(--sl-border); border-radius: 6px; padding: 3px 8px; font-size: 0.8rem; color: var(--sl-text); cursor: pointer; }
+.sl-card-media { aspect-ratio: 4/3; background: var(--sl-raise); border-bottom: 1px solid var(--sl-border); display: block; overflow: hidden; }
+.sl-card-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sl-card-media .sl-card-hover { display: none; }
+.sl-card:hover .sl-card-media.has-swap .sl-card-photo { display: none; }
+.sl-card:hover .sl-card-media.has-swap .sl-card-hover { display: block; }
+.sl-compare { position: absolute; top: 10px; left: 10px; z-index: 2; display: flex; gap: 6px; align-items: center; background: color-mix(in srgb, var(--sl-bg) 85%, transparent); border: 1px solid var(--sl-border); border-radius: 6px; padding: 3px 8px; font-size: 0.8rem; color: var(--sl-text); cursor: pointer; }
 .sl-compare-inline { position: static; margin-top: 12px; width: fit-content; }
 .sl-compare input { accent-color: var(--sl-accent); }
 .sl-card-body { padding: 18px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
@@ -281,6 +286,49 @@ ul { margin: 0; padding: 0; list-style: none; }
 .sl-form { display: grid; gap: 12px; }
 .sl-form label { display: grid; gap: 6px; color: var(--sl-text); font-size: 0.86rem; }
 .sl-form-success { color: var(--sl-ok); }
+.sl-form-error { color: var(--sl-out); }
+
+/* The CRM plugin hides #tw-crm-popup inline after a submit; this form lives in the page. */
+#sl-reserve #tw-crm-popup[data-tw-crm-inline] {
+	display: block !important;
+	position: static;
+	inset: auto;
+	z-index: auto;
+	padding: 0;
+	background: transparent;
+}
+#sl-reserve #tw-crm-popup[data-tw-crm-inline] .tw-crm-form__title,
+#sl-reserve #tw-crm-popup[data-tw-crm-inline] .tw-crm-popup__close {
+	display: none;
+}
+#sl-reserve #tw-crm-popup[data-tw-crm-inline] .tw-crm-form__field label {
+	color: var(--sl-text);
+	font-size: 0.86rem;
+}
+#sl-reserve #tw-crm-popup[data-tw-crm-inline] .tw-crm-form__field input,
+#sl-reserve #tw-crm-popup[data-tw-crm-inline] .tw-crm-form__field textarea,
+#sl-reserve #tw-crm-popup[data-tw-crm-inline] .tw-crm-form__field select {
+	width: 100%;
+	background: var(--sl-bg);
+	color: var(--sl-text);
+	border: 1px solid var(--sl-border);
+	border-radius: 8px;
+	padding: 10px 12px;
+}
+#sl-reserve #tw-crm-popup[data-tw-crm-inline] .tw-crm-form__submit {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--sl-accent);
+	color: var(--sl-on);
+	border: 0;
+	border-radius: 8px;
+	padding: 12px 22px;
+	font-weight: 600;
+	cursor: pointer;
+}
+#sl-reserve #tw-crm-popup[data-tw-crm-inline] .tw-crm-form__feedback.is-success { color: var(--sl-ok); }
+#sl-reserve #tw-crm-popup[data-tw-crm-inline] .tw-crm-form__feedback.is-error { color: var(--sl-out); }
 
 .sl-crumbs { font-family: var(--sl-mono); font-size: 0.86rem; margin-bottom: 18px; }
 .sl-crumbs ol { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; list-style: none; margin: 0; padding: 0; }
