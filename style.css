@@ -1,7 +1,7 @@
 /*
 Theme Name: TargetWeb - Stockline
 Author: TargetWeb
-Description: Showroom theme for equipment dealers. Every page is built from reorderable sections in the Customizer. WooCommerce powers the catalog, with optional cart and checkout.
+Description: Parent theme for Stockline dealer sites. VS3-Child can replace the header, footer, and homepage sections. Every page is built from reorderable sections in the Customizer. WooCommerce powers the catalog, with optional cart and checkout.
 Version: 1.0.0
 Requires at least: 6.0
 Requires PHP: 7.4
@@ -157,6 +157,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .sl-suggest a, .sl-suggest p { display: flex; gap: 12px; align-items: center; padding: 10px; border-radius: 8px; color: var(--sl-text); }
 .sl-suggest a:hover { background: var(--sl-raise); }
 .sl-suggest img, .sl-suggest-ph { width: 48px; height: 48px; object-fit: cover; border-radius: 6px; background: var(--sl-raise); }
+.sl-suggest-ph { display: flex; align-items: center; justify-content: center; padding: 3px; color: var(--sl-faint); font-size: 7px; font-weight: 600; line-height: 1.15; text-align: center; }
 .sl-suggest-all { background: none; border: 0; color: var(--sl-link); text-align: left; padding: 10px; cursor: pointer; }
 
 .sl-hero { position: relative; padding-top: 72px; padding-bottom: 64px;

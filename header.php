@@ -19,7 +19,8 @@ if ( is_front_page() ) {
 	$current = 'shop';
 }
 
-$logo_text  = sln_mod( 'sln_header_logo_text', get_bloginfo( 'name' ) );
+$logo_text  = sln_mod( 'sln_header_logo_text', 'MowtivatedPwr' );
+$logo_text  = trim( (string) $logo_text ) !== '' ? $logo_text : 'MowtivatedPwr';
 $logo_image = sln_mod( 'sln_header_logo_image', '' );
 $tagline    = sln_mod( 'sln_header_logo_tagline', '' );
 $reserve    = sln_mod( 'sln_header_reserve_button_text', 'Contact Store' );
@@ -27,17 +28,6 @@ $reserve_url = sln_mod( 'sln_header_reserve_button_link', '/contact/' );
 $left       = sln_mod( 'sln_header_top_bar_left', 'Mon–Fri 8–6 · Sat 8–4 · Sun closed' );
 $right      = sln_mod( 'sln_header_top_bar_right', '(123) 456-7890 · hello@yourstore.com' );
 $phone      = sln_phone();
-$shop       = function_exists( 'sln_shop_url' ) ? sln_shop_url() : home_url( '/shop/' );
-
-$fallback = array(
-	'home'    => array( sln_field( 'shop', 'breadcrumb', 'home_label' ), home_url( '/' ) ),
-	'shop'    => array( sln_field( 'shop', 'breadcrumb', 'current_label' ), $shop ),
-	'brands'  => array( sln_field( 'brands', 'intro', 'crumb' ), home_url( '/brands/' ) ),
-	'service'   => array( sln_field( 'service', 'hero', 'crumb' ), home_url( '/service/' ) ),
-	'financing' => array( sln_field( 'financing', 'hero', 'crumb' ), home_url( '/financing/' ) ),
-	'about'     => array( sln_field( 'about', 'intro', 'crumb' ), home_url( '/about/' ) ),
-	'contact' => array( sln_field( 'contact', 'intro', 'crumb' ), home_url( '/contact/' ) ),
-);
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
@@ -69,15 +59,18 @@ $fallback = array(
 	</a>
 
 	<nav class="sl-nav" aria-label="Primary">
-		<?php if ( has_nav_menu( 'primary' ) ) : ?>
-			<?php wp_nav_menu( array( 'theme_location' => 'primary', 'container' => false, 'depth' => 1 ) ); ?>
-		<?php else : ?>
-			<ul>
-				<?php foreach ( $fallback as $key => $item ) : ?>
-					<li><a href="<?php echo esc_url( $item[1] ); ?>" class="<?php echo $current === $key ? 'is-active' : ''; ?>"><?php echo esc_html( $item[0] ); ?></a></li>
-				<?php endforeach; ?>
-			</ul>
-		<?php endif; ?>
+		<?php
+		wp_nav_menu(
+			tw_main_menu_args(
+				array(
+					'theme_location' => 'primary',
+					'container'      => false,
+					'depth'          => 1,
+					'fallback_cb'    => false,
+				)
+			)
+		);
+		?>
 	</nav>
 
 	<button type="button" class="sl-search-open" aria-expanded="false" aria-controls="sl-search">
@@ -103,15 +96,18 @@ $fallback = array(
 			<button type="button" class="sl-sheet-close" data-close-sheet aria-label="Close">×</button>
 		</div>
 		<nav class="sl-sheet-nav">
-			<?php if ( has_nav_menu( 'primary' ) ) : ?>
-				<?php wp_nav_menu( array( 'theme_location' => 'primary', 'container' => false, 'depth' => 1 ) ); ?>
-			<?php else : ?>
-				<ul>
-					<?php foreach ( $fallback as $item ) : ?>
-						<li><a href="<?php echo esc_url( $item[1] ); ?>"><?php echo esc_html( $item[0] ); ?></a></li>
-					<?php endforeach; ?>
-				</ul>
-			<?php endif; ?>
+			<?php
+			wp_nav_menu(
+				tw_main_menu_args(
+					array(
+						'theme_location' => 'primary',
+						'container'      => false,
+						'depth'          => 1,
+						'fallback_cb'    => false,
+					)
+				)
+			);
+			?>
 		</nav>
 	</div>
 </div>

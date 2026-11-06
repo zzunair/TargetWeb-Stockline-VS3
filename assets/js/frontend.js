@@ -77,7 +77,7 @@
 						suggest.innerHTML = '<p>' + escapeHtml( window.slnSearch.empty ) + '</p>';
 					} else {
 						suggest.innerHTML = items.map( function ( item ) {
-							var img = item.image ? '<img src="' + escapeHtml( item.image ) + '" alt="" />' : '<span class="sl-suggest-ph"></span>';
+							var img = item.image ? '<img src="' + escapeHtml( item.image ) + '" alt="" />' : '<span class="sl-suggest-ph">Product Image Coming Soon</span>';
 							var meta = [ item.price, item.badge ].filter( Boolean ).join( ' · ' );
 							return '<a href="' + escapeHtml( item.url ) + '">' + img + '<span><strong>' + escapeHtml( item.name ) + '</strong><br><span class="sl-mono">' + escapeHtml( meta ) + '</span></span></a>';
 						} ).join( '' ) + '<button type="button" class="sl-suggest-all">' + escapeHtml( window.slnSearch.viewAll ) + '</button>';

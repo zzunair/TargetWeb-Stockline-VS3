@@ -5,6 +5,19 @@
 
 define( 'SLN_VERSION', '1.0.0-' . filemtime( get_template_directory() . '/style.css' ) );
 
+if ( ! function_exists( 'tw_main_menu_args' ) ) {
+	function tw_main_menu_args( $args = array() ) {
+		$menu = wp_get_nav_menu_object( 'Main Menu' );
+		if ( ! $menu ) {
+			$menu = wp_get_nav_menu_object( 'main-menu' );
+		}
+		if ( $menu ) {
+			$args['menu'] = (int) $menu->term_id;
+		}
+		return $args;
+	}
+}
+
 require_once get_template_directory() . '/inc/section-defs.php';
 require_once get_template_directory() . '/inc/template-functions.php';
 require_once get_template_directory() . '/inc/customizer.php';
@@ -74,7 +87,10 @@ function sln_ensure_pages() {
 function sln_enqueue_assets() {
 	$font = sln_mod( 'sln_font_family', 'Inter' );
 	wp_enqueue_style( 'sln-fonts', sln_google_fonts_url( $font ), array(), null );
-	wp_enqueue_style( 'sln-style', get_stylesheet_uri(), array( 'sln-fonts' ), SLN_VERSION );
+	wp_enqueue_style( 'sln-style', get_template_directory_uri() . '/style.css', array( 'sln-fonts' ), SLN_VERSION );
+	if ( get_stylesheet() !== get_template() ) {
+		wp_enqueue_style( 'sln-child-style', get_stylesheet_uri(), array( 'sln-style' ), wp_get_theme()->get( 'Version' ) );
+	}
 	$deps = ( function_exists( 'sln_ecommerce_enabled' ) && sln_ecommerce_enabled() ) ? array( 'jquery' ) : array();
 	wp_enqueue_script( 'sln-frontend', get_template_directory_uri() . '/assets/js/frontend.js', $deps, SLN_VERSION, true );
 	wp_localize_script(

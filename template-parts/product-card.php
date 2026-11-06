@@ -39,7 +39,7 @@ $qty_text = null !== $stock['qty'] ? (int) $stock['qty'] . sln_field( 'product',
 				<?php echo wp_get_attachment_image( $hover_id, 'medium', false, sln_image_attrs( $hover_id, '', array( 'class' => 'sl-card-hover', 'loading' => 'eager' ) ) ); ?>
 			<?php endif; ?>
 		<?php else : ?>
-			<?php sln_placeholder( $product->get_name() ); ?>
+			<?php sln_placeholder( __( 'Product Image Coming Soon', 'stockline' ) ); ?>
 		<?php endif; ?>
 	</a>
 	<?php if ( $compare && sln_mod( 'sln_compare_enabled', true ) ) : ?>

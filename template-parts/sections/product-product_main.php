@@ -41,7 +41,7 @@ $eyebrow  = trim( implode( ' · ', array_filter( array( $brands ? $brands[0] : '
 				<?php if ( $gallery ) : ?>
 					<?php echo wp_get_attachment_image( $gallery[0], 'large', false, sln_image_attrs( $gallery[0], $product->get_name(), array( 'id' => 'sl-gallery-img' ) ) ); ?>
 				<?php else : ?>
-					<?php sln_placeholder( sln_field( 'product', 'product_main', 'main_photo_placeholder' ) ); ?>
+					<?php sln_placeholder( __( 'Product Image Coming Soon', 'stockline' ) ); ?>
 				<?php endif; ?>
 				<?php if ( $gallery ) : ?><button type="button" class="sl-zoom" data-sl-zoom><?php echo esc_html( sln_field( 'product', 'product_main', 'zoom_label' ) ); ?></button><?php endif; ?>
 			</div>
